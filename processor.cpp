@@ -11,7 +11,11 @@ processor_t::processor_t() {
 
 // =====================================================================
 void processor_t::allocate() {
-	penalidade = 0;
+	this->penalidade = 0;
+	this->hits = 0;
+	this->misses = 0;
+	this->penalties = 0;
+	this->nextPC = 0;
 
 	this->BTB = (tLinha_btb**)malloc(sizeof(tLinha_btb*)*n_entradas_btb);
 
@@ -41,6 +45,12 @@ void processor_t::clock() {
 		}
 		else
 		{
+			if (this->nextPC!=0 && this->nextPC!=new_instruction.opcode_address)
+			{
+				this->nextPC = 0;
+				penalidade = penalidade_miss_btb;
+			}
+
 			BTBzar(new_instruction);
 		}
 	}
@@ -51,9 +61,11 @@ void processor_t::statistics() {
 	ORCS_PRINTF("######################################################\n");
 	ORCS_PRINTF("processor_t\n");
 
+ printf("BTB Hits: %lld\nBTB Misses: %lld\nPenalties: %lld cycles\n", this->hits, this->misses, this->penalties);
+
 };
 
-void processor_t::BTBzar(opcode_package_t inst) 
+void processor_t::BTBzar(opcode_package_t inst)
 {
 	uint64_t BTB_set;
 	uint64_t BTB_baseLine;
@@ -63,15 +75,14 @@ void processor_t::BTBzar(opcode_package_t inst)
 	if (inst.opcode_operation == INSTRUCTION_OPERATION_BRANCH)
 	{
 		BTB_set = (inst.opcode_address >> 2)&127;
-
-		printf("Caiu no set %ld\n", BTB_set);
+		this->nextPC = inst.opcode_address+inst.opcode_size;
 
 		// Procura na BTB:
-		int hit = 0;
-		int oldest = 1;
+		int hit = -1;
+		int oldest = 0;
 		uint64_t oldest_lru = 0;
 		BTB_baseLine = (BTB_set<<2);
-		
+
 		for (int i=0;i<4;++i)
 		{
 			BTB_line = BTB_baseLine+(uint64_t)i;
@@ -81,7 +92,7 @@ void processor_t::BTBzar(opcode_package_t inst)
 			{
 				if (linha->tag == inst.opcode_address)
 				{
-					hit = i+1;
+					hit = i;
 				}
 
 				if (linha->lru < oldest_lru)
@@ -90,24 +101,27 @@ void processor_t::BTBzar(opcode_package_t inst)
 					oldest = i;
 				}
 			}
-			else oldest = i+1;
+			else oldest = i;
 		}
 
-		if (hit)
+		if (hit!=-1)
 		{
 			// Sucesso então, já tava na BTB
 			linha = this->BTB[BTB_baseLine+(uint64_t)hit];
+			this->hits++;
+			this->nextPC = linha->add;
 			//linha->lru = (orcs_engine.get_global_cycle);
 		}
 		else
 		{
+			this->misses++;
 			// Escreve na BTB
 			linha = this->BTB[BTB_baseLine+(uint64_t)oldest];
 			linha->tag = inst.opcode_address;
 			//linha->lru = (orcs_engine.get_global_cycle);
 			linha->val = 1;
-			penalidade = penalidade_miss_btb;
-			printf("ESCREVENDO BTB: set: %ld, linha: %ld\n", BTB_set, BTB_line);
+			this->penalidade = penalidade_miss_btb;
+			this->penalties += penalidade_miss_btb;
 		}
 	}
 }
