@@ -22,7 +22,7 @@ void processor_t::allocate() {
 	PCPT->perceptron_weights = (int64_t*)malloc(sizeof(int64_t)*tamanho_perceptron);
 	PCPT->perceptron_values = (int64_t*)malloc(sizeof(int64_t)*tamanho_perceptron);
 
- PCPT->update = 0;
+ 	PCPT->update = 0;
 	PCPT->perceptron_values[0] = 1;
 
 	for (int64_t i=0;i<tamanho_perceptron;++i)
@@ -84,7 +84,7 @@ void processor_t::statistics() {
 	ORCS_PRINTF("######################################################\n");
 	ORCS_PRINTF("processor_t\n");
 
- printf("Perceptron good guesses: %lld\nPerceptron bad guesses: %lld\nPenalties: %lld cycles\n", this->good_guesses, this->bad_guesses, this->penalties);
+ printf("Perceptron good guesses: %ld\nPerceptron bad guesses: %ld\nPenalties: %ld cycles\n", this->good_guesses, this->bad_guesses, this->penalties);
 
 };
 
@@ -98,7 +98,7 @@ void processor_t::P(opcode_package_t inst)
 			sum += PCPT->perceptron_values[i]*PCPT->perceptron_weights[i];
 		}
 		PCPT->perceptron_output = PCPT->perceptron_weights[0]+sum;
-		printf("Perceptron Output: %lld\n", PCPT->perceptron_output);
+		printf("Perceptron Output: %ld\n", PCPT->perceptron_output);
 		PCPT->update = 1;
 		this->nextPC = inst.opcode_address+inst.opcode_size;
 	}

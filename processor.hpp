@@ -17,6 +17,27 @@ class processor_t {
      }perceptron_t;
 
      perceptron_t *PCPT;
+
+     typedef struct cacheline
+     {
+     	uint64_t tag;
+     	int valid;
+     	int dirty;
+     	uint64_t lru;
+     }cacheline_t;
+
+     typedef struct cacheset
+     {
+     	cacheline_t* sets;
+     	int associativity;
+     }cacheset_t;
+
+     typedef struct cache
+     {
+     	cacheset* sets;
+     	int setnum;
+     }cache_t;
+
     	int penalidade;
      uint64_t good_guesses;
      uint64_t bad_guesses;
