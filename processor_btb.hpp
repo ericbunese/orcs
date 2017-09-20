@@ -6,20 +6,18 @@ class processor_t {
 
     public:
 
-     typedef struct perceptron
-     {
-      int64_t perceptron_size;
-      int64_t *perceptron_weights;
-      int64_t *perceptron_values;
-      int64_t perceptron_threshold;
-      int64_t perceptron_output;
-      int update;
-     }perceptron_t;
+		typedef struct linha_btb
+		{
+			uint64_t tag;
+			uint64_t lru;
+			uint64_t add;
+			int val;
+		}tLinha_btb;
 
-     perceptron_t *PCPT;
+    	tLinha_btb **BTB;
     	int penalidade;
-     uint64_t good_guesses;
-     uint64_t bad_guesses;
+     uint64_t hits;
+     uint64_t misses;
      uint64_t penalties;
 
      uint64_t nextPC;
@@ -30,8 +28,5 @@ class processor_t {
 	    void allocate();
 	    void clock();
 	    void statistics();
-     void P(opcode_package_t inst);
-     void T(int64_t t);
-     int64_t sign(int64_t n);
-     int64_t abs(int64_t n);
+	    void BTBzar(opcode_package_t inst);
 };

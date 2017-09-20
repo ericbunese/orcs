@@ -3,6 +3,7 @@
 #define n_entradas_btb 512
 #define associatividade_btb 4
 #define penalidade_miss_btb 8
+#define tamanho_perceptron 128
 
 // =====================================================================
 processor_t::processor_t() {
@@ -11,19 +12,23 @@ processor_t::processor_t() {
 
 // =====================================================================
 void processor_t::allocate() {
-	this->penalidade = 0;
-	this->hits = 0;
-	this->misses = 0;
+
+	this->good_guesses = 0;
+	this->bad_guesses = 0;
 	this->penalties = 0;
-	this->nextPC = 0;
 
-	this->BTB = (tLinha_btb**)malloc(sizeof(tLinha_btb*)*n_entradas_btb);
+	PCPT = (perceptron_t*)malloc(sizeof(perceptron_t));
+	PCPT->perceptron_size = tamanho_perceptron;
+	PCPT->perceptron_weights = (int64_t*)malloc(sizeof(int64_t)*tamanho_perceptron);
+	PCPT->perceptron_values = (int64_t*)malloc(sizeof(int64_t)*tamanho_perceptron);
 
-	for (int i=0;i<n_entradas_btb;++i)
-	{
-		this->BTB[i] = (tLinha_btb*)malloc(sizeof(tLinha_btb));
-		this->BTB[i]->val = 0;
-	}
+ PCPT->update = 0;
+	PCPT->perceptron_values[0] = 1;
+
+	for (int64_t i=0;i<tamanho_perceptron;++i)
+						PCPT->perceptron_weights[i] = 0;
+
+	PCPT->perceptron_threshold = 1.93*tamanho_perceptron+14;
 };
 
 // =====================================================================
@@ -45,13 +50,31 @@ void processor_t::clock() {
 		}
 		else
 		{
-			if (this->nextPC!=0 && this->nextPC!=new_instruction.opcode_address)
+			if (PCPT->update)
 			{
-				this->nextPC = 0;
-				penalidade = penalidade_miss_btb;
+				if (this->nextPC!=0)
+				{
+					if (this->nextPC!=new_instruction.opcode_address)
+					{
+						printf("Perceptron Missed\n");
+						this->bad_guesses++;
+						this->penalties++;
+						penalidade = penalidade_miss_btb;
+						T(1);
+					}
+					else
+					{
+						T(-1);
+						this->good_guesses++;
+						printf("Perceptron Predicted Correctly.\n");
+					}
+					this->nextPC = 0;
+				}
+				PCPT->update = 0;
 			}
 
-			BTBzar(new_instruction);
+			//BTBzar(new_instruction);
+			P(new_instruction);
 		}
 	}
 };
@@ -61,67 +84,49 @@ void processor_t::statistics() {
 	ORCS_PRINTF("######################################################\n");
 	ORCS_PRINTF("processor_t\n");
 
- printf("BTB Hits: %lld\nBTB Misses: %lld\nPenalties: %lld cycles\n", this->hits, this->misses, this->penalties);
+ printf("Perceptron good guesses: %lld\nPerceptron bad guesses: %lld\nPenalties: %lld cycles\n", this->good_guesses, this->bad_guesses, this->penalties);
 
 };
 
-void processor_t::BTBzar(opcode_package_t inst)
+void processor_t::P(opcode_package_t inst)
 {
-	uint64_t BTB_set;
-	uint64_t BTB_baseLine;
-	uint64_t BTB_line;
-	tLinha_btb *linha;
-
 	if (inst.opcode_operation == INSTRUCTION_OPERATION_BRANCH)
 	{
-		BTB_set = (inst.opcode_address >> 2)&127;
+		int64_t sum = 0;
+		for (int64_t i=1;i<PCPT->perceptron_size;++i)
+		{
+			sum += PCPT->perceptron_values[i]*PCPT->perceptron_weights[i];
+		}
+		PCPT->perceptron_output = PCPT->perceptron_weights[0]+sum;
+		printf("Perceptron Output: %lld\n", PCPT->perceptron_output);
+		PCPT->update = 1;
 		this->nextPC = inst.opcode_address+inst.opcode_size;
+	}
+}
 
-		// Procura na BTB:
-		int hit = -1;
-		int oldest = 0;
-		uint64_t oldest_lru = 0;
-		BTB_baseLine = (BTB_set<<2);
-
-		for (int i=0;i<4;++i)
+void processor_t::T(int64_t t)
+{
+	if (sign(PCPT->perceptron_output)!=t || abs(PCPT->perceptron_output)<=0)
+	{
+		for (int64_t i=0;i<PCPT->perceptron_size;++i)
 		{
-			BTB_line = BTB_baseLine+(uint64_t)i;
-
-			linha = this->BTB[BTB_line];
-			if (linha->val)
-			{
-				if (linha->tag == inst.opcode_address)
-				{
-					hit = i;
-				}
-
-				if (linha->lru < oldest_lru)
-				{
-					oldest_lru = linha->lru;
-					oldest = i;
-				}
-			}
-			else oldest = i;
-		}
-
-		if (hit!=-1)
-		{
-			// Sucesso então, já tava na BTB
-			linha = this->BTB[BTB_baseLine+(uint64_t)hit];
-			this->hits++;
-			this->nextPC = linha->add;
-			//linha->lru = (orcs_engine.get_global_cycle);
-		}
-		else
-		{
-			this->misses++;
-			// Escreve na BTB
-			linha = this->BTB[BTB_baseLine+(uint64_t)oldest];
-			linha->tag = inst.opcode_address;
-			//linha->lru = (orcs_engine.get_global_cycle);
-			linha->val = 1;
-			this->penalidade = penalidade_miss_btb;
-			this->penalties += penalidade_miss_btb;
+			PCPT->perceptron_weights[i] = PCPT->perceptron_weights[i]+t*PCPT->perceptron_values[i];
 		}
 	}
+}
+
+int64_t processor_t::sign(int64_t n)
+{
+	if (n<0)
+					return -1;
+	else if (n>0)
+					return 1;
+	return 0;
+}
+
+int64_t processor_t::abs(int64_t n)
+{
+	if (n<0)
+					return n*-1;
+	return n;
 }
