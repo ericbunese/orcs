@@ -4,8 +4,8 @@
 #define associatividade_btb 4
 #define penalidade_miss_btb 8
 #define penalidade_miss_pcpt 8
-#define tamanho_perceptron 2
-#define numero_perceptrons 1
+#define tamanho_perceptron 32
+#define numero_perceptrons 4
 
 // =====================================================================
 processor_t::processor_t() {
@@ -20,6 +20,8 @@ void processor_t::allocate() {
 	this->penalties = 0;
 	this->total_guesses = 0;
 	this->penalidade = 0;
+	this->presumed_taken = 0;
+	this->presumed_nottaken = 0;
 
 	this->PCPT_table = (perceptron_table_t*)malloc(sizeof(perceptron_table_t));
 	this->PCPT_table->perceptron_values = (int64_t*)malloc(sizeof(int64_t)*tamanho_perceptron);
@@ -72,6 +74,7 @@ void processor_t::clock() {
 			 {
 			  if ((p->taken==1 && this->nextPC!=new_instruction.opcode_address) || (p->taken==-1 && this->nextPC==new_instruction.opcode_address))
 			  {
+						H(1);
 			   T(p, p->taken);
 			   this->good_guesses++;
 			   printf("Perceptron Predicted Correctly.\n");
@@ -82,6 +85,7 @@ void processor_t::clock() {
 			   this->bad_guesses++;
 			   this->penalties++;
 			   penalidade = penalidade_miss_pcpt;
+						H(-1);
 			   T(p, p->taken*-1);
 			  }
 			 }
@@ -109,6 +113,7 @@ void processor_t::statistics() {
  printf("\nPerceptron good guesses: %lld\nPerceptron bad guesses: %lld\nPenalties: %lld cycles\n", this->good_guesses, this->bad_guesses, this->penalties);
 	printf("Right guesses: %10.2f\n", ((double)this->good_guesses/(double)this->total_guesses)*100);
 	printf("Wrong guesses: %10.2f\n", ((double)this->bad_guesses/(double)this->total_guesses)*100);
+	printf("Presumed Taken: %lld\nPresumed Not Taken: %lld\n", this->presumed_taken, this->presumed_nottaken);
 };
 
 void processor_t::P(perceptron_t* p, opcode_package_t inst)
@@ -126,10 +131,12 @@ void processor_t::P(perceptron_t* p, opcode_package_t inst)
 		if (p->perceptron_output<0)
 		{
 		 p->taken = -1;
+			this->presumed_nottaken++;
 		}
 		else
 		{
 		 p->taken = 1;
+			this->presumed_taken++;
 		}
 		this->nextPC = inst.opcode_address+inst.opcode_size;
 		printf("Next PC:%10.0lld\n", this->nextPC);
@@ -149,6 +156,15 @@ void processor_t::T(perceptron_t* p, int64_t t)
 		 }
 		}
 	}
+}
+
+void processor_t::H(uint64_t h)
+{
+	for (int i=tamanho_perceptron-1;i>0;--i)
+	{
+		this->PCPT_table->perceptron_values[i] = this->PCPT_table->perceptron_values[i-1];
+	}
+	this->PCPT_table->perceptron_values[1] = h;
 }
 
 int64_t processor_t::sign(int64_t n)

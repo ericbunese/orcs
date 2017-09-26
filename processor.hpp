@@ -50,7 +50,8 @@ class processor_t {
      uint64_t bad_guesses;
      uint64_t penalties;
      uint64_t total_guesses;
-
+     uint64_t presumed_taken;
+     uint64_t presumed_nottaken;
      uint64_t nextPC;
 		// ====================================================================
 		/// Methods
@@ -61,6 +62,7 @@ class processor_t {
 	    void statistics();
      void P(perceptron_t* p, opcode_package_t inst);
      void T(perceptron_t* p, int64_t t);
+     void H(uint64_t h);
      void init_PCPT(perceptron_t* p, int id);
      int64_t sign(int64_t n);
      int64_t abs(int64_t n);
