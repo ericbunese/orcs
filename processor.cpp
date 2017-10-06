@@ -15,6 +15,7 @@ processor_t::processor_t() {
 // =====================================================================
 void processor_t::allocate() {
 
+	printf("allocation started\n");
 	this->good_guesses = 0;
 	this->bad_guesses = 0;
 	this->penalties = 0;
@@ -31,7 +32,6 @@ void processor_t::allocate() {
 	for (int i=0;i<numero_perceptrons;++i)
 	{
 		this->PCPT_table->perceptrons[i] = (perceptron_t*)malloc(sizeof(perceptron_t));
-		printf("%d: %p\n", i, this->PCPT_table->perceptrons[i]);
 		init_PCPT(this->PCPT_table->perceptrons[i], i);
 	}
 
@@ -40,6 +40,10 @@ void processor_t::allocate() {
 	{
 		this->PCPT_table->perceptron_values[i] = 0;
 	}
+
+	//Initialize caches
+	init_cache(this->l1, 1024, 4);
+	init_cache(this->l2, 15625, 8);
 
 	printf("allocation complete\n");
 };
@@ -110,7 +114,7 @@ void processor_t::statistics() {
 	printf("Number of Perceptrons: %d\n", numero_perceptrons);
 	printf("Perceptron Buffer Size: %d\n", tamanho_perceptron);
 
- printf("\nPerceptron good guesses: %ld\nPerceptron bad guesses: %ld\nPenalties: %ld cycles\n", this->good_guesses, this->bad_guesses, this->penalties);
+ 	printf("\nPerceptron good guesses: %ld\nPerceptron bad guesses: %ld\nPenalties: %ld cycles\n", this->good_guesses, this->bad_guesses, this->penalties);
 	printf("Right guesses: %10.2f\n", ((double)this->good_guesses/(double)this->total_guesses)*100);
 	printf("Wrong guesses: %10.2f\n", ((double)this->bad_guesses/(double)this->total_guesses)*100);
 	printf("Presumed Taken: %ld\nPresumed Not Taken: %ld\n", this->presumed_taken, this->presumed_nottaken);
@@ -173,16 +177,16 @@ void processor_t::H(uint64_t h)
 int64_t processor_t::sign(int64_t n)
 {
 	if (n<0)
-					return -1;
+		return -1;
 	else if (n>0)
-					return 1;
+		return 1;
 	return 0;
 }
 
 int64_t processor_t::abs(int64_t n)
 {
 	if (n<0)
-					return n*-1;
+		return n*-1;
 	return n;
 }
 
@@ -196,4 +200,21 @@ void processor_t::init_PCPT(perceptron_t* p, int id)
 		 p->perceptron_weights[i] = 0;
 
 	p->perceptron_threshold = 1.93*tamanho_perceptron+14;
+}
+
+void processor_t::init_cache(cache_t *c, int nsets, int ass)
+{
+	c = (cache_t*)malloc(sizeof(cache_t));
+	c->lines = (cacheset_t**)malloc(sizeof(cacheset_t*)*nsets);
+	c->nlines = nsets;
+
+	for (int i=0;i<nsets;++i)
+	{
+		c->lines[i]->sets = (cacheline_t**)malloc(sizeof(cacheline_t*)*ass);
+		c->lines[i]->ass = ass;
+		for (int j=0;j<ass;++j)
+		{
+			c->lines[i]->sets[j]->valid = 0;
+		}
+	}
 }
