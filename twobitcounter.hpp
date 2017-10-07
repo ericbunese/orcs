@@ -9,7 +9,7 @@
 #ifndef twobitcounter_hpp
 #define twobitcounter_hpp
 #define penalidade_miss_twobit 8
-#define taken_status 3
+#define taken_status 1
 
 #include <inttypes.h>
 #include <stdlib.h>
