@@ -14,7 +14,7 @@ twobitcounter_t::twobitcounter_t()
   this->taken = 0;
 }
 
-void twobitcounter_t::P(uint64_t pc, uint64_t opcodeSize)
+void twobitcounter_t::P(uint64_t npc)
 {
   if (this->status >= taken_status)
   {
@@ -25,7 +25,7 @@ void twobitcounter_t::P(uint64_t pc, uint64_t opcodeSize)
     this->taken = -1;
   }
   this->twobit_queues++;
-  this->nextPC = pc+opcodeSize;
+  this->nextPC = npc;
 }
 
 void twobitcounter_t::update(uint64_t pc)

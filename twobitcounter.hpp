@@ -30,7 +30,7 @@ class twobitcounter_t {
   /// Methods
   // ====================================================================
   twobitcounter_t();
-  void P(uint64_t pc, uint64_t opcodeSize);
+  void P(uint64_t npc);
   void update(uint64_t pc);
   int max(int a, int b);
   int min(int a, int b);

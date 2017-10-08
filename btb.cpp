@@ -80,9 +80,16 @@ int btb_t::btb_search(uint64_t pc, uint64_t opcodeSize)
    cur = this->btb[bas+(uint64_t)oldest];
    cur->tag = pc;
    cur->val = true;
+   cur->add = npc;
+   this->nextPC = npc;
    this->btb_pent += penalidade_miss_btb;
    return 0;
  }
+}
+
+uint64_t btb_t::btb_nextPC()
+{
+  return this->nextPC;
 }
 
 int btb_t::btb_pents()

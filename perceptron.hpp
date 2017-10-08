@@ -55,7 +55,7 @@ class perceptron_t {
   perceptron_t();
   void init_PCPT(perceptron_s_t* p, int id);
   int update(uint64_t pc);
-  void P(uint64_t pc, uint64_t opcodeSize);
+  void P(uint64_t pc, uint64_t npc);
   void T(perceptron_s_t* p, int64_t t);
   void H(uint64_t h);
   void pcpt_statistics();

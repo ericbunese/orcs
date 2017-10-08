@@ -24,7 +24,7 @@ class btb_t {
     }linha_btb_t;
   
     linha_btb_t **btb;
-  
+      
     uint64_t btb_queues;
     uint64_t btb_hits;
     uint64_t btb_miss;
@@ -39,6 +39,7 @@ class btb_t {
   int btb_search(uint64_t pc, uint64_t opcodeSize);
   int btb_pents();
   void btb_statistics();
+  uint64_t btb_nextPC();
 };
 
 #endif /* btb_hpp */

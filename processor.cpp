@@ -57,11 +57,14 @@ void processor_t::clock() {
 		{
       if (this->BTB->btb_search(new_instruction.opcode_address, new_instruction.opcode_size))
       {
+        //Retrieve address from BTB
+        uint64_t nextPC = this->BTB->btb_nextPC();
+        
         this->penalidade = this->PCPT->update(new_instruction.opcode_address);
-        this->PCPT->P(new_instruction.opcode_address, new_instruction.opcode_size);
+        this->PCPT->P(new_instruction.opcode_address, nextPC);
         
         this->twobit->update(new_instruction.opcode_address);
-        this->twobit->P(new_instruction.opcode_address, new_instruction.opcode_size);
+        this->twobit->P(nextPC);
       }
       else
       {

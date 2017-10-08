@@ -65,7 +65,7 @@ int perceptron_t::update(uint64_t pc)
 }
 
 //Makes the perceptron decision
-void perceptron_t::P(uint64_t pc, uint64_t opcodeSize)
+void perceptron_t::P(uint64_t pc, uint64_t npc)
 {
   perceptron_s_t *p;
   
@@ -91,7 +91,8 @@ void perceptron_t::P(uint64_t pc, uint64_t opcodeSize)
       p->taken = 1;
 			this->pcpt_taken++;
 		}
-		this->nextPC = pc+opcodeSize;
+		//this->nextPC = pc+opcodeSize;
+    this->nextPC = npc;
 		this->PCPT_table->update = p->id;
 	}
 }
