@@ -28,6 +28,7 @@ void processor_t::allocate() {
   this->twobit = new twobitcounter_t;
 
 	//Initialize caches
+  this->l1 = new cache_t(4, 256, 1);
 };
 
 // =====================================================================
@@ -53,23 +54,30 @@ void processor_t::clock() {
 			/// If EOF
 			orcs_engine.simulator_alive = false;
 		}
-		else if (new_instruction.opcode_operation == INSTRUCTION_OPERATION_BRANCH && new_instruction.branch_type == BRANCH_COND)
+		else
 		{
-      if (this->BTB->btb_search(new_instruction.opcode_address, new_instruction.opcode_size))
+      if (new_instruction.opcode_operation == INSTRUCTION_OPERATION_BRANCH && new_instruction.branch_type == BRANCH_COND)
       {
-        //Retrieve address from BTB
-        uint64_t nextPC = this->BTB->btb_nextPC();
+        if (this->BTB->btb_search(new_instruction.opcode_address, new_instruction.opcode_size))
+        {
+          //Retrieve address from BTB
+          uint64_t nextPC = this->BTB->btb_nextPC();
         
-        this->penalidade = this->PCPT->update(new_instruction.opcode_address);
-        this->PCPT->P(new_instruction.opcode_address, nextPC);
+          this->penalidade = this->PCPT->update(new_instruction.opcode_address);
+          this->PCPT->P(new_instruction.opcode_address, nextPC);
         
-        this->twobit->update(new_instruction.opcode_address);
-        this->twobit->P(nextPC);
+          this->twobit->update(new_instruction.opcode_address);
+          this->twobit->P(nextPC);
+        }
+        else
+        {
+          //btb miss, apply penalty.
+          this->penalidade = this->BTB->btb_pents();
+        }
       }
-      else
+      else if (new_instruction.opcode_operation == INSTRUCTION_OPERATION_MEM_LOAD || new_instruction.opcode_operation == INSTRUCTION_OPERATION_MEM_STORE)
       {
-        //btb miss, apply penalty.
-        this->penalidade = this->BTB->btb_pents();
+        //Memory instruction, let's do science.
       }
 		}
 	}
