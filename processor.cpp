@@ -88,6 +88,9 @@ void processor_t::statistics() {
 	ORCS_PRINTF("######################################################\n");
 	ORCS_PRINTF("processor_t\n");
   
+  ORCS_PRINTF("Global Cycle Count:\t%lld\n", orcs_engine.global_cycle);
+  ORCS_PRINTF("Cycle: \t\t%5.2f\n", ((double)orcs_engine.global_cycle/(double)200000000)*100);
+  
   this->BTB->btb_statistics();
   this->PCPT->pcpt_statistics();
   this->twobit->twobit_statistics();

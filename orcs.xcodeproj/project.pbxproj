@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		CE67349C1F8BF5EB0036C507 /* Orcs - Apresentação.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Orcs - Apresentação.pdf"; sourceTree = "<group>"; };
 		CE8DA9B31F8921BD001C0741 /* cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cache.cpp; sourceTree = "<group>"; };
 		CE8DA9B41F8921BD001C0741 /* cache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cache.hpp; sourceTree = "<group>"; };
 		CE8DA9B51F8924CD001C0741 /* perceptron.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = perceptron.cpp; sourceTree = "<group>"; };
@@ -50,6 +51,7 @@
 		CEE3DD081F891A56002E429E = {
 			isa = PBXGroup;
 			children = (
+				CE67349C1F8BF5EB0036C507 /* Orcs - Apresentação.pdf */,
 				CE8DA9B21F8921A6001C0741 /* processor_structures */,
 				CEE3DD131F891A5F002E429E /* Makefile */,
 				CEE3DD141F891A5F002E429E /* master */,

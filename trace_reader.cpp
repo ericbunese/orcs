@@ -434,3 +434,9 @@ void trace_reader_t::statistics() {
 	ORCS_PRINTF("fetch_instructions:%lu\n", (unsigned long)this->fetch_instructions);
 
 };
+
+
+uint64_t trace_reader_t::get_fetch_instructions()
+{
+  return this->fetch_instructions;
+}

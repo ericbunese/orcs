@@ -16,7 +16,7 @@ class trace_reader_t {
         uint32_t *binary_bbl_size;      /// Total of instructions for each BBL
         opcode_package_t **binary_dict; /// Complete dictionary of BBLs and instructions
 
-		uint64_t fetch_instructions;
+        uint64_t fetch_instructions;
 
     public:
         // ====================================================================
@@ -36,6 +36,8 @@ class trace_reader_t {
         bool trace_next_dynamic(uint32_t *next_bbl);
         bool trace_next_memory(uint64_t *next_address, uint32_t *operation_size, bool *is_read);
         bool trace_fetch(opcode_package_t *m);
+  
+        uint64_t get_fetch_instructions();
 };
 
 
