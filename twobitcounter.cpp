@@ -58,10 +58,10 @@ void twobitcounter_t::twobit_statistics()
   printf("######################################################\n");
   printf("2BIT COUNTER STATISTICS\n\n");
   printf("2BIT Penalty\t%d\n\n", penalidade_miss_twobit);
-  printf("2BIT Queues:\t%lld\n", this->twobit_queues);
-  printf("2BIT HITS:\t\t%lld\n", this->twobit_smart);
-  printf("2BIT MISS:\t\t%lld\n", this->twobit_dumb);
-  printf("2BIT Penalties:\t%lld\n\n", this->twobit_pent);
+  printf("2BIT Queues:\t%ld\n", this->twobit_queues);
+  printf("2BIT HITS:\t\t%ld\n", this->twobit_smart);
+  printf("2BIT MISS:\t\t%ld\n", this->twobit_dumb);
+  printf("2BIT Penalties:\t%ld\n\n", this->twobit_pent);
   printf("2BIT HIT RATIO: \t%5.2f\n", ((double)this->twobit_smart / (double)this->twobit_queues)*100);
   printf("2BIT MISS RATIO: \t%5.2f\n", ((double)this->twobit_dumb / (double)this->twobit_queues)*100);
 }
