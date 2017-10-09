@@ -35,13 +35,20 @@ void twobitcounter_t::update(uint64_t pc)
     if ((this->taken==1 && pc != this->nextPC) || (this->taken==-1 && pc == this->nextPC))
     {
       this->twobit_smart++;
-      this->status = min(this->status+1, 3);
+      if (this->taken==-1)
+        this->status = max(this->status-1, 0);
+      else
+        this->status = min(this->status+1, 3);
     }
     else
     {
       this->twobit_dumb++;
       this->twobit_pent++;
-      this->status = max(this->status-1, 0);
+      
+      if (this->taken==-1)
+        this->status = min(this->status+1, 3);
+      else
+        this->status = max(this->status-1, 0);
     }
   }
 }
