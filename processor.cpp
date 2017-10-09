@@ -39,7 +39,7 @@ void processor_t::clock() {
 
   if (--(this->keepalive) <= 0)
   {
-    printf("Keep Alive: %lld\n", orcs_engine.global_cycle);
+    printf("Keep Alive: %ld\n", orcs_engine.global_cycle);
     this->keepalive = 65767;
   }
 
