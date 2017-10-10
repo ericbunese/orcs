@@ -51,7 +51,7 @@ void processor_t::clock() {
 
   if (this->keepalive <= 0)
   {
-    printf("Keep Alive: %ld\n", orcs_engine.global_cycle);
+    printf("Keep Alive: %lld\n", orcs_engine.global_cycle);
     this->keepalive = 65767<<10;
   }
   else this->keepalive--;
@@ -168,9 +168,9 @@ void processor_t::statistics() {
 	ORCS_PRINTF("######################################################\n");
 	ORCS_PRINTF("processor_t\n");
   
-  ORCS_PRINTF("Global Cycle Count:\t%ld\n", orcs_engine.global_cycle);
+  ORCS_PRINTF("Global Cycle Count:\t%lld\n", orcs_engine.global_cycle);
   ORCS_PRINTF("Cycle: \t\t%5.2f\n", ((double)orcs_engine.global_cycle/(double)200000000)*100);
-  ORCS_PRINTF("Cycles spent on memory fetch: \t%ld\n", this->cycles_spent_memory);
+  ORCS_PRINTF("Cycles spent on memory fetch: \t%lld\n", this->cycles_spent_memory);
   
   this->BTB->btb_statistics();
   this->PCPT->pcpt_statistics();

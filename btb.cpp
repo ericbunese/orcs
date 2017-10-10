@@ -104,10 +104,10 @@ void btb_t::btb_statistics()
   printf("BTB SIZE:\t%d\n", n_entradas_btb);
   printf("BTB WAYS:\t%d\n", associatividade_btb);
   printf("BTB PLTY:\t%d\n\n", penalidade_miss_btb);
-  printf("BTB QUES:\t%ld\n", this->btb_queues);
-  printf("BTB HITS:\t%ld\n", this->btb_hits);
-  printf("BTB MISS:\t%ld\n", this->btb_miss);
-  printf("BTB PENT:\t%ld\n\n", this->btb_pent);
+  printf("BTB QUES:\t%lld\n", this->btb_queues);
+  printf("BTB HITS:\t%lld\n", this->btb_hits);
+  printf("BTB MISS:\t%lld\n", this->btb_miss);
+  printf("BTB PENT:\t%lld\n\n", this->btb_pent);
   printf("BTB HIT RATIO: \t\t%5.2f\n", ((double)this->btb_hits / (double)this->btb_queues)*100);
   printf("BTB MISS RATIO: \t%5.2f\n", ((double)this->btb_miss / (double)this->btb_queues)*100);
 }

@@ -146,10 +146,10 @@ void perceptron_t::pcpt_statistics()
   printf("Num Perceptrons:\t%d\n", numero_perceptrons);
   printf("History Lenght:\t\t%d\n", tamanho_perceptron);
   printf("Perceptron Penalty\t%d\n\n", penalidade_miss_pcpt);
-  printf("PCPT Queues:\t%ld\n", this->pcpt_queues);
-  printf("PCPT HITS:\t\t%ld\n", this->pcpt_smart);
-  printf("PCPT MISS:\t\t%ld\n", this->pcpt_dumb);
-  printf("PCPT Penalties:\t%ld\n\n", this->pcpt_pent);
+  printf("PCPT Queues:\t%lld\n", this->pcpt_queues);
+  printf("PCPT HITS:\t\t%lld\n", this->pcpt_smart);
+  printf("PCPT MISS:\t\t%lld\n", this->pcpt_dumb);
+  printf("PCPT Penalties:\t%lld\n\n", this->pcpt_pent);
   printf("PCPT HIT RATIO: \t%5.2f\n", ((double)this->pcpt_smart / (double)this->pcpt_queues)*100);
   printf("PCPT MISS RATIO: \t%5.2f\n", ((double)this->pcpt_dumb / (double)this->pcpt_queues)*100);
 }

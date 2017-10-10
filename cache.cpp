@@ -52,7 +52,7 @@ bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write)
   
   //Index the cache line
   tag = (address >> 6);
-  index = (tag & 1023) % this->nlines;
+  index = (tag & 1023) % this->nlines; //@TODO: rever a máscara para o index de forma a funcionar direito na L2.
   //printf("Tag is %lld, index is %lld\n", tag, index);
   
   line = this->cache->lines[index];
@@ -107,9 +107,9 @@ void cache_t::cache_statistics()
   printf("Num lines:\t%d\n", this->nlines);
   printf("Associativity:\t\t%d\n", this->ass);
   printf("Cache Penalty\t%d\n\n", this->cache->latencia);
-  printf("Cache Queues:\t%ld\n", this->cache_ques);
-  printf("Cache HITS:\t\t%ld\n", this->cache_hits);
-  printf("Cache MISS:\t\t%ld\n", this->cache_miss);
+  printf("Cache Queues:\t%lld\n", this->cache_ques);
+  printf("Cache HITS:\t\t%lld\n", this->cache_hits);
+  printf("Cache MISS:\t\t%lld\n", this->cache_miss);
   printf("Cache HIT RATIO: \t%5.2f\n", ((double)this->cache_hits / (double)this->cache_ques)*100);
   printf("Cache MISS RATIO: \t%5.2f\n", ((double)this->cache_miss / (double)this->cache_ques)*100);
 }
