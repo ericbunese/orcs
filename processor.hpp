@@ -13,6 +13,9 @@ class processor_t {
   twobitcounter_t *twobit;
   
   cache_t *l1;
+  cache_t *l2;
+  
+  uint64_t cycles_spent_memory;
   
   // ====================================================================
   /// Methods

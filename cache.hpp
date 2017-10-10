@@ -12,6 +12,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 class cache_t {
   private:
@@ -32,12 +33,20 @@ class cache_t {
     cacheset_t *cache;
     int ass;
     int nlines;
+    char *name;
+  
+    uint64_t cache_ques;
+    uint64_t cache_hits;
+    uint64_t cache_miss;
 
   public:
   // ====================================================================
   /// Methods
   // ====================================================================
-  cache_t(int ass, int nlines, int lat);
+  cache_t(char* name, int ass, int nlines, int lat);
+  bool cache_search(uint64_t address, uint64_t cc, bool is_write);
+  int cache_getLatencia();
+  void cache_statistics();
 };
 
 
