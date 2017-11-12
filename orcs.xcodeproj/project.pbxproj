@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		CE15E2C51FB7AC3B00960373 /* prefetch_prediction.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = prefetch_prediction.pdf; sourceTree = "<group>"; };
+		CE15E2C61FB7AC3B00960373 /* SMS.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = SMS.pdf; sourceTree = "<group>"; };
 		CE67349C1F8BF5EB0036C507 /* Orcs - Apresentação.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Orcs - Apresentação.pdf"; sourceTree = "<group>"; };
 		CE67349D1F8BF6CD0036C507 /* Perceptron.key */ = {isa = PBXFileReference; lastKnownFileType = file; path = Perceptron.key; sourceTree = "<group>"; };
 		CE8DA9B31F8921BD001C0741 /* cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cache.cpp; sourceTree = "<group>"; };
@@ -17,6 +19,8 @@
 		CE8DA9B81F8925BD001C0741 /* btb.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = btb.hpp; sourceTree = "<group>"; };
 		CE8DA9BB1F894239001C0741 /* twobitcounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = twobitcounter.cpp; sourceTree = "<group>"; };
 		CE8DA9BC1F894239001C0741 /* twobitcounter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = twobitcounter.hpp; sourceTree = "<group>"; };
+		CEDF83561FB86C9C007CED34 /* Aula13-Software_Prefetching.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Aula13-Software_Prefetching.pdf"; sourceTree = "<group>"; };
+		CEDF83571FB86C9C007CED34 /* Aula14-Hardware_Prefetching.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Aula14-Hardware_Prefetching.pdf"; sourceTree = "<group>"; };
 		CEE3DD131F891A5F002E429E /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		CEE3DD141F891A5F002E429E /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
 		CEE3DD151F891A5F002E429E /* opcode_package.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = opcode_package.cpp; sourceTree = "<group>"; };
@@ -52,6 +56,10 @@
 		CEE3DD081F891A56002E429E = {
 			isa = PBXGroup;
 			children = (
+				CEDF83561FB86C9C007CED34 /* Aula13-Software_Prefetching.pdf */,
+				CEDF83571FB86C9C007CED34 /* Aula14-Hardware_Prefetching.pdf */,
+				CE15E2C51FB7AC3B00960373 /* prefetch_prediction.pdf */,
+				CE15E2C61FB7AC3B00960373 /* SMS.pdf */,
 				CE67349D1F8BF6CD0036C507 /* Perceptron.key */,
 				CE67349C1F8BF5EB0036C507 /* Orcs - Apresentação.pdf */,
 				CE8DA9B21F8921A6001C0741 /* processor_structures */,
@@ -167,6 +175,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 			};
@@ -212,6 +221,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 			};
 			name = Release;
@@ -251,7 +261,7 @@
 				CEE3DD0F1F891A56002E429E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		CEE3DD101F891A57002E429E /* Build configuration list for PBXLegacyTarget "orcs" */ = {
 			isa = XCConfigurationList;
@@ -260,7 +270,7 @@
 				CEE3DD121F891A57002E429E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
