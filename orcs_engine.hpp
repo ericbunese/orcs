@@ -6,6 +6,7 @@ class orcs_engine_t {
     public:
         /// Program input
         char *arg_trace_file_name;
+        char *prefetcher;
 
         /// Control the Global Cycle
         uint64_t global_cycle;

@@ -15,13 +15,14 @@ static void process_argv(int argc, char **argv) {
     static struct option long_options[] = {
         {"help",        no_argument, 0, 'h'},
         {"trace",       required_argument, 0, 't'},
+        {"prefetcher",  required_argument, 0, 'p'},
         {NULL,          0, NULL, 0}
     };
 
     // Count number of traces
     int opt;
     int option_index = 0;
-    while ((opt = getopt_long_only(argc, argv, "h:t:",
+    while ((opt = getopt_long_only(argc, argv, "h:t:p:",
                  long_options, &option_index)) != -1) {
         switch (opt) {
         case 0:
@@ -38,6 +39,11 @@ static void process_argv(int argc, char **argv) {
         case 't':
             orcs_engine.arg_trace_file_name = optarg;
             break;
+            
+        case 'p':
+            orcs_engine.prefetcher = optarg;
+            break;
+            
         case '?':
             break;
 

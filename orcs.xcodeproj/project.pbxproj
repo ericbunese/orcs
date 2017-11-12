@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		074098591FB8AD8700ECF0B5 /* stride.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stride.cpp; sourceTree = "<group>"; };
+		0740985A1FB8AD8700ECF0B5 /* stride.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stride.hpp; sourceTree = "<group>"; };
 		CE15E2C51FB7AC3B00960373 /* prefetch_prediction.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = prefetch_prediction.pdf; sourceTree = "<group>"; };
 		CE15E2C61FB7AC3B00960373 /* SMS.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = SMS.pdf; sourceTree = "<group>"; };
 		CE67349C1F8BF5EB0036C507 /* Orcs - Apresentação.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Orcs - Apresentação.pdf"; sourceTree = "<group>"; };
@@ -49,6 +51,8 @@
 				CE8DA9B81F8925BD001C0741 /* btb.hpp */,
 				CE8DA9BB1F894239001C0741 /* twobitcounter.cpp */,
 				CE8DA9BC1F894239001C0741 /* twobitcounter.hpp */,
+				074098591FB8AD8700ECF0B5 /* stride.cpp */,
+				0740985A1FB8AD8700ECF0B5 /* stride.hpp */,
 			);
 			name = processor_structures;
 			sourceTree = "<group>";

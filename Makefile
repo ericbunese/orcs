@@ -27,6 +27,8 @@ SRC_PERCEPTRON = perceptron.cpp
 
 SRC_CACHE = cache.cpp
 
+SRC_STRIDE = stride.cpp
+
 SRC_CORE =  simulator.cpp orcs_engine.cpp\
 			$(SRC_TRACE_READER)	\
 			$(SRC_PACKAGE) \
@@ -34,6 +36,7 @@ SRC_CORE =  simulator.cpp orcs_engine.cpp\
       $(SRC_TWOBITCOUNTER) \
       $(SRC_PERCEPTRON) \
       $(SRC_CACHE) \
+      $(SRC_STRIDE) \
 			$(SRC_PROCESSOR)
 
 ########################################################
