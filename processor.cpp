@@ -38,7 +38,7 @@ void processor_t::allocate() {
   l2name[1] = '2';
   l2name[2] = '\0';
   this->l1 = new cache_t(l1name, 4, 256, 1);
-  this->l2 = new cache_t(l2name, 8, 15625, 4);
+  this->l2 = new cache_t(l2name, 8, 65536, 4);
   free(l1name);
   free(l2name);
 };

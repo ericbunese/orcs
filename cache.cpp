@@ -7,6 +7,7 @@
 //
 
 #include "cache.hpp"
+#include <math.h>
 
 cache_t::cache_t(char*name, int ass, int nlines, int lat)
 {
@@ -47,13 +48,14 @@ bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write)
   uint64_t index, tag, lru = 0;
   cacheline_t *line;
   int oldest = 0;
+  double l2 = log2((double)this->nlines);
+  int idx = (1 << (int)l2)-1;
   
   this->cache_ques++;
   
   //Index the cache line
   tag = (address >> 6);
-  index = (tag & 1023) % this->nlines; //@TODO: rever a máscara para o index de forma a funcionar direito na L2.
-  //printf("Tag is %lld, index is %lld\n", tag, index);
+  index = (tag & idx);
   
   line = this->cache->lines[index];
   
@@ -104,10 +106,10 @@ void cache_t::cache_statistics()
 {
   printf("######################################################\n");
   printf("CACHE %s STATISTICS\n\n", this->name);
-  printf("Num lines:\t%d\n", this->nlines);
-  printf("Associativity:\t\t%d\n", this->ass);
+  printf("Num lines:/t\t%d\n", this->nlines);
+  printf("Associativity:\t%d\n", this->ass);
   printf("Cache Penalty\t%d\n\n", this->cache->latencia);
-  printf("Cache Queues:\t%lld\n", this->cache_ques);
+  printf("Cache Queues:\t\t%lld\n", this->cache_ques);
   printf("Cache HITS:\t\t%lld\n", this->cache_hits);
   printf("Cache MISS:\t\t%lld\n", this->cache_miss);
   printf("Cache HIT RATIO: \t%5.2f\n", ((double)this->cache_hits / (double)this->cache_ques)*100);
