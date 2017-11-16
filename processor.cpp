@@ -41,6 +41,9 @@ void processor_t::allocate() {
   this->l2 = new cache_t(l2name, 8, 65536, 4);
   free(l1name);
   free(l2name);
+  
+  //Initialize Stride Prefetch
+  this->st = new stride_t(16);
 };
 
 // =====================================================================
@@ -94,18 +97,23 @@ void processor_t::clock() {
       int lat = 0;
       if (new_in.is_read) // Memory access for read 1
       {
-        if (this->l1->cache_search(new_in.read_address, orcs_engine.global_cycle, false))
+        if (this->l1->cache_search(new_in.read_address, orcs_engine.global_cycle, false, this->st))
         {
+          lat += this->l1->cache_getWait();
         }
         else
         {
-          if (this->l2->cache_search(new_in.read_address, orcs_engine.global_cycle, false))
+          if (this->l2->cache_search(new_in.read_address, orcs_engine.global_cycle, false, this->st))
           {
+            lat += this->l1->cache_getWait();
           }
           else
           {
             //DRAM Latency
             lat += 200;
+            
+            //READ 1 PREFETCH
+            this->l2->cache_load( st->stride_request(new_in.opcode_address, new_in.read_address, orcs_engine.global_cycle), orcs_engine.global_cycle );
           }
           //L2 Latency
           lat += this->l2->cache_getLatencia();
@@ -116,18 +124,23 @@ void processor_t::clock() {
       // =====================================================================
       if (new_in.is_read2) // Memory access for read 2
       {
-        if (this->l1->cache_search(new_in.read2_address, orcs_engine.global_cycle, false))
+        if (this->l1->cache_search(new_in.read2_address, orcs_engine.global_cycle, false, this->st))
         {
+          lat += this->l1->cache_getWait();
         }
         else
         {
-          if (this->l2->cache_search(new_in.read2_address, orcs_engine.global_cycle, false))
+          if (this->l2->cache_search(new_in.read2_address, orcs_engine.global_cycle, false, this->st))
           {
+            lat += this->l1->cache_getWait();
           }
           else
           {
             //DRAM Latency
             lat += 200;
+            
+            //READ 2 PREFETCH
+            this->l2->cache_load( st->stride_request(new_in.opcode_address, new_in.read2_address, orcs_engine.global_cycle), orcs_engine.global_cycle );
           }
           //L2 Latency
           lat += this->l2->cache_getLatencia();
@@ -138,13 +151,15 @@ void processor_t::clock() {
       // =====================================================================
       if (new_in.is_write) // Memory access for write
       {
-        if (this->l1->cache_search(new_in.write_address, orcs_engine.global_cycle, true))
+        if (this->l1->cache_search(new_in.write_address, orcs_engine.global_cycle, true, this->st))
         {
+          lat += this->l1->cache_getWait();
         }
         else
         {
-          if (this->l2->cache_search(new_in.write_address, orcs_engine.global_cycle, true))
+          if (this->l2->cache_search(new_in.write_address, orcs_engine.global_cycle, true, this->st))
           {
+            lat += this->l1->cache_getWait();
           }
           else
           {
@@ -177,4 +192,5 @@ void processor_t::statistics() {
   this->twobit->twobit_statistics();
   this->l1->cache_statistics();
   this->l2->cache_statistics();
+  this->st->stride_statistics();
 };

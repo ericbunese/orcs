@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "stride.hpp"
 
 class cache_t {
   private:
@@ -20,8 +21,10 @@ class cache_t {
     {
       uint64_t *tag;
       uint64_t *lru;
+      uint64_t *use;
       bool *val;
       bool *dir;
+      bool *str;
     }cacheline_t;
   
     typedef struct cacheset
@@ -33,6 +36,7 @@ class cache_t {
     cacheset_t *cache;
     int ass;
     int nlines;
+    uint64_t wait_cycles;
     char *name;
   
     uint64_t cache_ques;
@@ -44,9 +48,11 @@ class cache_t {
   /// Methods
   // ====================================================================
   cache_t(char* name, int ass, int nlines, int lat);
-  bool cache_search(uint64_t address, uint64_t cc, bool is_write);
+  bool cache_search(uint64_t address, uint64_t cc, bool is_write, stride_t *st);
   int cache_getLatencia();
   void cache_statistics();
+  uint64_t cache_getWait();
+  void cache_load(uint64_t address, uint64_t cc);
 };
 
 

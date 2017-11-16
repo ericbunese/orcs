@@ -132,6 +132,7 @@ enum branch_t {
 #include "./twobitcounter.hpp"
 #include "./perceptron.hpp"
 #include "./cache.hpp"
+#include "./stride.hpp"
 
 #include "./processor.hpp"
 

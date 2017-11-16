@@ -15,6 +15,8 @@ class processor_t {
   cache_t *l1;
   cache_t *l2;
   
+  stride_t *st;
+  
   uint64_t cycles_spent_memory;
   
   // ====================================================================
