@@ -7,12 +7,14 @@
 //
 
 #include "sms.hpp"
+#define debugsms 0
 
 //Initialize Structure
 sms_t::sms_t()
 {
   this->requests_made = 0;
   this->guesses_taken = 0;
+  this->useful_guesses = 0;
 
   this->filterTable = (filterT_t**)malloc(sizeof(filterT_t*)*tam_t);
   this->accTable = (accT_t**)malloc(sizeof(accT_t*)*tam_t);
@@ -61,13 +63,16 @@ sms_t::sms_t()
 //Helper Method to get block number
 int sms_t::offset_address(uint64_t address)
 {
-  return (((address & 1048576) >> 14) & 64);
+  uint64_t aux = (address & 63);
+  if (debugsms)
+      printf("ADDRESS IS %lld AND OFFSET %lld\n", address, aux);
+  return aux;
 }
 
 //Helper Method to get base address (without block number)
 uint64_t sms_t::base_address(uint64_t address)
 {
-  uint64_t aux = address & 1048576;
+  uint64_t aux = address & 63;
   return address - aux;
 }
 
@@ -75,6 +80,7 @@ uint64_t sms_t::base_address(uint64_t address)
 uint64_t sms_t::sms_request(uint64_t pc, uint64_t cc)
 {
  bool stop = false;
+ 
  for (int i=0;i<tam_pht && !stop;++i)
  {
   if (this->phTable[i]->pc==pc)
@@ -142,6 +148,9 @@ void sms_t::sms_acc(uint64_t pc, uint64_t address, uint64_t cc)
     }
   }
   
+  if (debugsms)
+    printf("SMS ACC QUEUED: [%d] pc = %lld, ad = %lld\n", use, pc, address);
+  
   //Test search
   if (found)
   {
@@ -189,12 +198,17 @@ void sms_t::sms_filter(uint64_t pc, uint64_t address, uint64_t cc)
     }
   }
   
+  if (debugsms)
+      printf("SMS FILTER QUEUED: [%d], pc = %lld, ad = %lld\n", use, pc, address);
+  
   if (found)
   {
     int off = this->offset_address(address);
     if (off != this->filterTable[use]->off)
     {
       //Insert at acc table
+      if (debugsms)
+          printf("DIFFERENT OFFSET SAME PC - MOVED TO ACC TABLE.\n");
       this->sms_addAcc(pc, this->base_address(address), this->filterTable[use]->off, off, cc);
       this->filterTable[use]->val = false;
     }
@@ -202,6 +216,8 @@ void sms_t::sms_filter(uint64_t pc, uint64_t address, uint64_t cc)
   else
   {
     //TRIGGER ACCESS
+    if (debugsms)
+        printf("TRIGGER ACCESS EVENT DISCOVERED\n");
     this->filterTable[use]->pc = pc;
     this->filterTable[use]->base = this->base_address(address);
     this->filterTable[use]->lru = cc;
@@ -284,20 +300,38 @@ void sms_t::sms_addPht(accT_t* fromAcc, uint64_t cc)
   }
 }
 
+//Helper Method to process pc into index
+uint64_t sms_t::sms_index(uint64_t pc)
+{
+  uint64_t aux = pc & 63;
+  if (debugsms)
+      printf("pc = %lld -> %lld\n", pc, aux);
+  return pc-aux;
+}
+
 // ====================================================================
 /// API
 // ====================================================================
 uint64_t sms_t::sms_query(uint64_t pc, uint64_t address, uint64_t cc)
 {
+  pc = this->sms_index(pc);
   this->requests_made++;
+  
+  if (debugsms)
+      printf("sms query: pc = %lld, ad = %lld", pc, address);
+  
   uint64_t pf = this->sms_request(pc, cc);
   if (pf > 0)
   {
+    if (debugsms)
+        printf(" - GUESS: %lld\n", pf);
     this->guesses_taken++;
     return pf;
   }
   else
   {
+    if (debugsms)
+        printf(" - NO GUESS\n");
     this->sms_acc(pc, address, cc);
     return 0;
   }
@@ -305,6 +339,7 @@ uint64_t sms_t::sms_query(uint64_t pc, uint64_t address, uint64_t cc)
 
 void sms_t::sms_cleanup(uint64_t pc, uint64_t cc)
 {
+  pc = this->sms_index(pc);
   for (int i=0;i<tam_t;++i)
   {
     if (this->filterTable[i]->pc == pc)
@@ -315,6 +350,8 @@ void sms_t::sms_cleanup(uint64_t pc, uint64_t cc)
     
     if (this->accTable[i]->pc == pc)
     {
+      if (debugsms)
+          printf("PC %lld MOVED TO PHT\n", pc);
       this->sms_addPht(this->accTable[i], cc);
       this->accTable[i]->val = false;
       return;
@@ -328,4 +365,5 @@ void sms_t::sms_statistics()
   printf("SPATIAL MEMORY STREAMING STATISTICS\n\n");
   printf("Requests Made: \t\t%lld\n", this->requests_made);
   printf("Guesses Taken: \t\t%lld\n", this->guesses_taken);
+  printf("Useful Guesses: \t%lld\n", this->useful_guesses);
 }

@@ -49,7 +49,7 @@ class cache_t {
   /// Methods
   // ====================================================================
   cache_t(char* name, int ass, int nlines, int lat);
-  bool cache_search(uint64_t address, uint64_t cc, bool is_write, stride_t *st, sms_t *sms, uint64_t pc);
+  bool cache_search(uint64_t address, uint64_t cc, bool is_write, stride_t *st, sms_t *sms, uint64_t pc, int pf);
   int cache_getLatencia();
   void cache_statistics();
   uint64_t cache_getWait();

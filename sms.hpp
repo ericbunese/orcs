@@ -61,11 +61,13 @@ private:
   void sms_filter(uint64_t pc, uint64_t address, uint64_t cc);
   void sms_addAcc(uint64_t pc, uint64_t base, int off1, int off2, uint64_t cc);
   void sms_addPht(accT_t* fromAcc, uint64_t cc);
+  uint64_t sms_index(uint64_t pc);
   
 public:
   // ====================================================================
   /// Methods
   // ====================================================================
+  uint64_t useful_guesses;
   sms_t();
   uint64_t sms_query(uint64_t pc, uint64_t address, uint64_t cc);
   void sms_cleanup(uint64_t pc, uint64_t cc);

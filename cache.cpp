@@ -46,7 +46,7 @@ cache_t::cache_t(char*name, int ass, int nlines, int lat)
   }
 }
 
-bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write, stride_t *st, sms_t* sms, uint64_t pc)
+bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write, stride_t *st, sms_t* sms, uint64_t pc, int pf)
 {
   //printf("====================\n====================\n");
   //printf("Cache %s search for address: %lld\n", this->name, address);
@@ -78,7 +78,10 @@ bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write, stride_
         
         if (line->str[i])
         {
-         st->useful_strides++;
+         if (pf==0)
+             st->useful_strides++;
+         else if (pf==1)
+             sms->useful_guesses++;
          //line->str[i] = false;
         }
         
