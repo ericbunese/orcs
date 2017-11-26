@@ -106,6 +106,7 @@ void processor_t::clock() {
           if (this->l2->cache_search(new_in.read_address, orcs_engine.global_cycle, false, this->st))
           {
             lat += this->l1->cache_getWait();
+            this->l1->cache_load(new_in.read_address, orcs_engine.global_cycle, false);
           }
           else
           {
@@ -113,7 +114,7 @@ void processor_t::clock() {
             lat += 200;
             
             //READ 1 PREFETCH
-            this->l2->cache_load( st->stride_request(new_in.opcode_address, new_in.read_address, orcs_engine.global_cycle), orcs_engine.global_cycle );
+            this->l2->cache_load( st->stride_request(new_in.opcode_address, new_in.read_address, orcs_engine.global_cycle), orcs_engine.global_cycle, true );
           }
           //L2 Latency
           lat += this->l2->cache_getLatencia();
@@ -133,6 +134,7 @@ void processor_t::clock() {
           if (this->l2->cache_search(new_in.read2_address, orcs_engine.global_cycle, false, this->st))
           {
             lat += this->l1->cache_getWait();
+            this->l1->cache_load(new_in.read2_address, orcs_engine.global_cycle, false);
           }
           else
           {
@@ -140,7 +142,7 @@ void processor_t::clock() {
             lat += 200;
             
             //READ 2 PREFETCH
-            this->l2->cache_load( st->stride_request(new_in.opcode_address, new_in.read2_address, orcs_engine.global_cycle), orcs_engine.global_cycle );
+            this->l2->cache_load( st->stride_request(new_in.opcode_address, new_in.read2_address, orcs_engine.global_cycle), orcs_engine.global_cycle, true );
           }
           //L2 Latency
           lat += this->l2->cache_getLatencia();
@@ -160,6 +162,7 @@ void processor_t::clock() {
           if (this->l2->cache_search(new_in.write_address, orcs_engine.global_cycle, true, this->st))
           {
             lat += this->l1->cache_getWait();
+            this->l1->cache_load(new_in.write_address, orcs_engine.global_cycle, false);
           }
           else
           {

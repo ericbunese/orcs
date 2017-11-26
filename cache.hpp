@@ -52,7 +52,7 @@ class cache_t {
   int cache_getLatencia();
   void cache_statistics();
   uint64_t cache_getWait();
-  void cache_load(uint64_t address, uint64_t cc);
+  void cache_load(uint64_t address, uint64_t cc, bool pf);
 };
 
 

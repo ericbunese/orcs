@@ -78,7 +78,7 @@ uint64_t stride_t::stride_request(uint64_t pc, uint64_t address, uint64_t cc)
     {
       //printf("Prefetcher %d loads address %lld with stride %lld for pc %lld\n", oldest, pc+this->strides[oldest]->stride, this->strides[oldest]->stride, pc);
       this->proper_strides++;
-      return pc+this->strides[oldest]->stride;
+      return (pc + ((this->strides[oldest]->stride)<<2));
     }
     else
     {

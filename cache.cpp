@@ -77,7 +77,10 @@ bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write, stride_
         line->dir[i] = (is_write || line->dir[i]);
         
         if (line->str[i])
-            st->useful_strides++;
+        {
+         st->useful_strides++;
+         //line->str[i] = false;
+        }
         
         uint64_t dif = line->use[i]-cc;
         if (dif>0)
@@ -112,7 +115,7 @@ bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write, stride_
   return false;
 }
 
-void cache_t::cache_load(uint64_t address, uint64_t cc)
+void cache_t::cache_load(uint64_t address, uint64_t cc, bool pf)
 {
   if (address==0)
       return;
@@ -147,7 +150,7 @@ void cache_t::cache_load(uint64_t address, uint64_t cc)
   line->lru[oldest] = cc;
   line->use[oldest] = cc+200;
   line->tag[oldest] = tag;
-  line->str[oldest] = true;
+  line->str[oldest] = pf;
 }
 
 int cache_t::cache_getLatencia()
