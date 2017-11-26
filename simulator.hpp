@@ -133,6 +133,7 @@ enum branch_t {
 #include "./perceptron.hpp"
 #include "./cache.hpp"
 #include "./stride.hpp"
+#include "./sms.hpp"
 
 #include "./processor.hpp"
 

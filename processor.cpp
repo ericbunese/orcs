@@ -7,6 +7,8 @@
 #define tamanho_perceptron 62
 #define numero_perceptrons 64
 
+#define prefetcher 0 //0 = STRIDE, 1 = SPATIAL MEMORY STREAMING
+
 // =====================================================================
 processor_t::processor_t() {
   printf("Program Initialized.\nPlease stand by...\n");
@@ -44,6 +46,9 @@ void processor_t::allocate() {
   
   //Initialize Stride Prefetch
   this->st = new stride_t(16);
+  
+  //Initialize Spatial Memory Streaming
+  this->sms = new sms_t();
 };
 
 // =====================================================================
@@ -97,13 +102,13 @@ void processor_t::clock() {
       int lat = 0;
       if (new_in.is_read) // Memory access for read 1
       {
-        if (this->l1->cache_search(new_in.read_address, orcs_engine.global_cycle, false, this->st))
+        if (this->l1->cache_search(new_in.read_address, orcs_engine.global_cycle, false, this->st, this->sms, new_in.opcode_address))
         {
           lat += this->l1->cache_getWait();
         }
         else
         {
-          if (this->l2->cache_search(new_in.read_address, orcs_engine.global_cycle, false, this->st))
+          if (this->l2->cache_search(new_in.read_address, orcs_engine.global_cycle, false, this->st, this->sms, new_in.opcode_address))
           {
             lat += this->l1->cache_getWait();
             this->l1->cache_load(new_in.read_address, orcs_engine.global_cycle, false);
@@ -121,17 +126,19 @@ void processor_t::clock() {
         }
         //L1 Latency
         lat += this->l1->cache_getLatencia();
+        
+        this->l1->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.read_address, orcs_engine.global_cycle), orcs_engine.global_cycle, true );
       }
       // =====================================================================
       if (new_in.is_read2) // Memory access for read 2
       {
-        if (this->l1->cache_search(new_in.read2_address, orcs_engine.global_cycle, false, this->st))
+        if (this->l1->cache_search(new_in.read2_address, orcs_engine.global_cycle, false, this->st, this->sms, new_in.opcode_address))
         {
           lat += this->l1->cache_getWait();
         }
         else
         {
-          if (this->l2->cache_search(new_in.read2_address, orcs_engine.global_cycle, false, this->st))
+          if (this->l2->cache_search(new_in.read2_address, orcs_engine.global_cycle, false, this->st, this->sms, new_in.opcode_address))
           {
             lat += this->l1->cache_getWait();
             this->l1->cache_load(new_in.read2_address, orcs_engine.global_cycle, false);
@@ -149,17 +156,19 @@ void processor_t::clock() {
         }
         //L1 Latency
         lat += this->l1->cache_getLatencia();
+        
+        this->l1->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.read2_address, orcs_engine.global_cycle), orcs_engine.global_cycle, true );
       }
       // =====================================================================
       if (new_in.is_write) // Memory access for write
       {
-        if (this->l1->cache_search(new_in.write_address, orcs_engine.global_cycle, true, this->st))
+        if (this->l1->cache_search(new_in.write_address, orcs_engine.global_cycle, true, this->st, this->sms, new_in.opcode_address))
         {
           lat += this->l1->cache_getWait();
         }
         else
         {
-          if (this->l2->cache_search(new_in.write_address, orcs_engine.global_cycle, true, this->st))
+          if (this->l2->cache_search(new_in.write_address, orcs_engine.global_cycle, true, this->st, this->sms, new_in.opcode_address))
           {
             lat += this->l1->cache_getWait();
             this->l1->cache_load(new_in.write_address, orcs_engine.global_cycle, false);
@@ -174,6 +183,8 @@ void processor_t::clock() {
         }
         //L1 Latency
         lat += this->l1->cache_getLatencia();
+        
+        this->l1->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.write_address, orcs_engine.global_cycle), orcs_engine.global_cycle, true );
       }
       this->penalidade = lat;
       this->cycles_spent_memory += lat;
@@ -196,4 +207,5 @@ void processor_t::statistics() {
   this->l1->cache_statistics();
   this->l2->cache_statistics();
   this->st->stride_statistics();
+  this->sms->sms_statistics();
 };

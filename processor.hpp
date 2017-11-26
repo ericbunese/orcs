@@ -16,6 +16,7 @@ class processor_t {
   cache_t *l2;
   
   stride_t *st;
+  sms_t* sms;
   
   uint64_t cycles_spent_memory;
   

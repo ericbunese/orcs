@@ -46,7 +46,7 @@ cache_t::cache_t(char*name, int ass, int nlines, int lat)
   }
 }
 
-bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write, stride_t *st)
+bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write, stride_t *st, sms_t* sms, uint64_t pc)
 {
   //printf("====================\n====================\n");
   //printf("Cache %s search for address: %lld\n", this->name, address);
@@ -103,6 +103,7 @@ bool cache_t::cache_search(uint64_t address, uint64_t cc, bool is_write, stride_
   if (line->val[oldest] && line->dir[oldest])
   {
     //WriteBack
+    sms->sms_cleanup(pc, cc);
   }
   
   //printf("Not found, written at associative set %d\n", oldest);

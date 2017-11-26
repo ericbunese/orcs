@@ -29,6 +29,8 @@ SRC_CACHE = cache.cpp
 
 SRC_STRIDE = stride.cpp
 
+SRC_SMS = sms.cpp
+
 SRC_CORE =  simulator.cpp orcs_engine.cpp\
 			$(SRC_TRACE_READER)	\
 			$(SRC_PACKAGE) \
@@ -37,6 +39,7 @@ SRC_CORE =  simulator.cpp orcs_engine.cpp\
       $(SRC_PERCEPTRON) \
       $(SRC_CACHE) \
       $(SRC_STRIDE) \
+      $(SRC_SMS) \
 			$(SRC_PROCESSOR)
 
 ########################################################
