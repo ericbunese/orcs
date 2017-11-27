@@ -124,12 +124,15 @@ void processor_t::clock() {
           }
           //L2 Latency
           lat += this->l2->cache_getLatencia();
+          
+          if (prefetcher==1)
+            this->l2->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.write_address, orcs_engine.global_cycle, true), orcs_engine.global_cycle, true );
         }
         //L1 Latency
         lat += this->l1->cache_getLatencia();
         
         if (prefetcher==1)
-            this->l1->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.read_address, orcs_engine.global_cycle), orcs_engine.global_cycle, true );
+            this->l1->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.read_address, orcs_engine.global_cycle, false), orcs_engine.global_cycle, true );
       }
       // =====================================================================
       if (new_in.is_read2) // Memory access for read 2
@@ -156,12 +159,15 @@ void processor_t::clock() {
           }
           //L2 Latency
           lat += this->l2->cache_getLatencia();
+          
+          if (prefetcher==1)
+            this->l2->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.write_address, orcs_engine.global_cycle, true), orcs_engine.global_cycle, true );
         }
         //L1 Latency
         lat += this->l1->cache_getLatencia();
         
         if (prefetcher==1)
-            this->l2->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.read2_address, orcs_engine.global_cycle), orcs_engine.global_cycle, true );
+            this->l2->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.read2_address, orcs_engine.global_cycle, false), orcs_engine.global_cycle, true );
       }
       // =====================================================================
       if (new_in.is_write) // Memory access for write
@@ -184,12 +190,15 @@ void processor_t::clock() {
           }
           //L2 Latency
           lat += this->l2->cache_getLatencia();
+          
+          if (prefetcher==1)
+            this->l2->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.write_address, orcs_engine.global_cycle, true), orcs_engine.global_cycle, true );
         }
         //L1 Latency
         lat += this->l1->cache_getLatencia();
         
         if (prefetcher==1)
-            this->l2->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.write_address, orcs_engine.global_cycle), orcs_engine.global_cycle, true );
+            this->l2->cache_load( this->sms->sms_query(new_in.opcode_address, new_in.write_address, orcs_engine.global_cycle, false), orcs_engine.global_cycle, true );
       }
       this->penalidade = lat;
       this->cycles_spent_memory += lat;
@@ -206,9 +215,9 @@ void processor_t::statistics() {
   ORCS_PRINTF("Cycle: \t\t%5.2f\n", ((double)orcs_engine.global_cycle/(double)200000000)*100);
   ORCS_PRINTF("Cycles spent on memory fetch: \t%lld\n", this->cycles_spent_memory);
   
-  this->BTB->btb_statistics();
-  this->PCPT->pcpt_statistics();
-  this->twobit->twobit_statistics();
+  //this->BTB->btb_statistics();
+  //this->PCPT->pcpt_statistics();
+  //this->twobit->twobit_statistics();
   this->l1->cache_statistics();
   this->l2->cache_statistics();
   if (prefetcher==0)this->st->stride_statistics();

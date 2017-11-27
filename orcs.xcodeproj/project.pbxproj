@@ -13,6 +13,8 @@
 		CE15E2C61FB7AC3B00960373 /* SMS.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = SMS.pdf; sourceTree = "<group>"; };
 		CE2DFB441FCB262300A35E3A /* sms.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sms.cpp; sourceTree = "<group>"; };
 		CE2DFB451FCB262300A35E3A /* sms.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sms.hpp; sourceTree = "<group>"; };
+		CE2DFB461FCC46F700A35E3A /* sms.key */ = {isa = PBXFileReference; lastKnownFileType = file; path = sms.key; sourceTree = "<group>"; };
+		CE2DFB471FCC67C000A35E3A /* smsPresentation.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = smsPresentation.pdf; sourceTree = "<group>"; };
 		CE67349C1F8BF5EB0036C507 /* Orcs - Apresentação.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Orcs - Apresentação.pdf"; sourceTree = "<group>"; };
 		CE67349D1F8BF6CD0036C507 /* Perceptron.key */ = {isa = PBXFileReference; lastKnownFileType = file; path = Perceptron.key; sourceTree = "<group>"; };
 		CE8DA9B31F8921BD001C0741 /* cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cache.cpp; sourceTree = "<group>"; };
@@ -64,6 +66,8 @@
 		CEE3DD081F891A56002E429E = {
 			isa = PBXGroup;
 			children = (
+				CE2DFB471FCC67C000A35E3A /* smsPresentation.pdf */,
+				CE2DFB461FCC46F700A35E3A /* sms.key */,
 				CEDF83561FB86C9C007CED34 /* Aula13-Software_Prefetching.pdf */,
 				CEDF83571FB86C9C007CED34 /* Aula14-Hardware_Prefetching.pdf */,
 				CE15E2C51FB7AC3B00960373 /* prefetch_prediction.pdf */,

@@ -312,15 +312,20 @@ uint64_t sms_t::sms_index(uint64_t pc)
 // ====================================================================
 /// API
 // ====================================================================
-uint64_t sms_t::sms_query(uint64_t pc, uint64_t address, uint64_t cc)
+uint64_t sms_t::sms_query(uint64_t pc, uint64_t address, uint64_t cc, bool makeguess)
 {
+  uint64_t pf = 0;
   pc = this->sms_index(pc);
-  this->requests_made++;
   
   if (debugsms)
       printf("sms query: pc = %lld, ad = %lld", pc, address);
   
-  uint64_t pf = this->sms_request(pc, cc);
+  if (makeguess)
+  {
+    this->requests_made++;
+    pf = this->sms_request(pc, cc);
+  }
+  
   if (pf > 0)
   {
     if (debugsms)

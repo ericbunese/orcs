@@ -69,7 +69,7 @@ public:
   // ====================================================================
   uint64_t useful_guesses;
   sms_t();
-  uint64_t sms_query(uint64_t pc, uint64_t address, uint64_t cc);
+  uint64_t sms_query(uint64_t pc, uint64_t address, uint64_t cc, bool makeguess);
   void sms_cleanup(uint64_t pc, uint64_t cc);
   void sms_statistics();
 };
